@@ -1,0 +1,16 @@
+# 1. 按键打怪
+python main.py --title "《新天龙八部》 0.07.7507 (怀旧二区:天下第一)" --mode macro_combat --profile default
+
+python main.py --title "《新天龙八部》 0.07.7507 (原始一区:江湖梦)" --mode macro_combat --profile default
+
+# 2. 死亡恢复+挂机
+python main.py --title "《新天龙八部》 0.07.7507 (怀旧二区:天下第一)" --mode recover_autofarm --profile recover_default
+
+python main.py --title "《新天龙八部》 0.07.7507 (原始一区:江湖梦)" --mode recover_autofarm --profile recover_default
+
+# 3. 死亡恢复+按键打怪（可开模式打人）
+python main.py --title "《新天龙八部》 0.07.7507 (怀旧二区:天下第一)" --mode recover_autocombat --profile recover_combat_default
+
+# 4. 自动种植（种植-等待-收菜循环）
+python main.py --title "《新天龙八部》 0.07.7507 (原始一区:江湖梦)" --mode auto_plant --profile auto_plant
+```
