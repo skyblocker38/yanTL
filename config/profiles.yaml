@@ -1,0 +1,132 @@
+default:
+  jitter: 0.10
+  loop_gap: 1
+  macro:
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 1.20 }
+    - { type: key, key: "r", hold: 0.07, gap: 0.10 }
+
+
+recover_default:
+  jitter: 0.08
+  check_interval: 120        # 检测死亡弹窗的间隔（秒）
+  threshold: 0.8             # 出窍弹窗检测阈值
+  
+  # 地图检测相关配置
+  max_underworld_retries: 3  # 流程2最大重试次数（如果还在地府）
+  max_travel_retries: 2      # 流程3最大重试次数（如果未到达目标场景）
+  max_total_retries: 5       # 总重试次数上限（防止流程2-3之间反复死亡）
+  
+  travel_wait: 180           # 世界地图传送等待时间（秒）
+  scene: xueyuan           # 目标场景：xueyuan（雪原）或 huanglong（黄龙）
+
+  # 模板配置
+  templates:
+    death_chuqiao: "templates/chuqiao.png"         # 死亡出窍弹窗
+    
+    # 地图检测模板（可选）
+    map_difu: "templates/map_difu.png"             # 地府地图名称（用于验证是否离开地府）
+    map_xueyuan: "templates/map_xueyuan.png"       # 雪原地图名称（用于验证是否到达）
+    map_huanglong: "templates/map_huanglong.png"   # 黄龙地图名称（用于验证是否到达）
+    map_moya: "templates/map_moya.png"             # 摩崖洞地图名称（用于验证是否到达）
+
+  # 点击坐标配置
+  clicks:
+    chuqiao: [589, 253]        # 出窍按钮
+    mengpo: [900, 301]         # 孟婆NPC
+    luoyang: [71, 199]         # 洛阳选项
+    xueyuan: [660, 74]         # 雪原场景
+    huanglong: [792, 631]      # 黄龙场景
+    moya: [689, 303]           # 摩崖洞
+    ditu_click: [459, 595]     # 地图点击位置
+    confirm_btn: [575, 471]    # 确认按钮
+    coord_input: [920, 468]    # 坐标输入框
+    move_btn: [996, 470]       # 移动按钮
+    dismount_btn: [676, 680]   # 下坐骑按钮
+    summon_pet_pos: [195, 476] # 召唤宠物位置
+
+  # 目标坐标
+  target:
+    x: 152
+    y: 136
+
+  # 时间配置（可选，使用默认值）
+  walk_to_mengpo_wait: 5     # 走到孟婆的等待时间
+  leave_underworld_wait: 8   # 离开地府的等待时间
+  move_to_xy_wait: 30        # 移动到坐标的等待时间
+  summon_wait: 5             # 召唤宠物的等待时间
+
+
+recover_combat_default:
+  jitter: 0.2
+  check_interval: 120        # 检测死亡弹窗的间隔（秒）
+  threshold: 0.8             # 出窍弹窗检测阈值
+  
+  # 地图检测相关配置
+  max_underworld_retries: 3  # 流程2最大重试次数（如果还在地府）
+  max_travel_retries: 2      # 流程3最大重试次数（如果未到达目标场景）
+  max_total_retries: 5       # 总重试次数上限（防止流程2-3之间反复死亡）
+  
+  travel_wait: 200           # 世界地图传送等待时间（秒）
+  scene: xueyuan             # 目标场景：xueyuan（雪原）或 huanglong（黄龙）
+
+  # 模板配置
+  templates:
+    death_chuqiao: "templates/chuqiao.png"         # 死亡出窍弹窗
+    
+    # 地图检测模板（可选）
+    map_difu: "templates/map_difu.png"             # 地府地图名称
+    map_xueyuan: "templates/map_xueyuan.png"       # 雪原地图名称
+    map_huanglong: "templates/map_huanglong.png"   # 黄龙地图名称
+
+  # 点击坐标配置
+  clicks:
+    chuqiao: [589, 253]        # 出窍按钮
+    mengpo: [900, 301]         # 孟婆NPC
+    luoyang: [71, 199]         # 洛阳选项
+    xueyuan: [660, 74]         # 雪原场景
+    huanglong: [792, 631]      # 黄龙场景
+    ditu_click: [459, 595]     # 地图点击位置
+    confirm_btn: [575, 471]    # 确认按钮
+    coord_input: [920, 468]    # 坐标输入框
+    move_btn: [996, 470]       # 移动按钮
+    dismount_btn: [676, 680]   # 下坐骑按钮
+    summon_pet_pos: [195, 476] # 召唤宠物位置
+
+  # 目标坐标
+  target:
+    x: 151
+    y: 137
+
+  # 时间配置
+  walk_to_mengpo_wait: 5     # 走到孟婆的等待时间
+  leave_underworld_wait: 8   # 离开地府的等待时间
+  move_to_xy_wait: 30        # 移动到坐标的等待时间
+  summon_wait: 5             # 召唤宠物的等待时间
+
+  # ==========================================
+  # 战斗宏配置（核心区别）
+  # ==========================================
+  # 这里配置技能释放序列，会循环执行
+  macro:
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 1.20 }
+  
+  loop_gap: 2              # 每轮宏循环后的间隔（秒）
+
+
+auto_plant:
+  jitter: 0.2
+    
+  # 点击坐标配置
+  clicks:
+    daocaoren: [504, 376]     # 稻草人位置
+    shoucai1: [577, 461]      # 收菜1位置
+    shoucai2: [452, 461]      # 收菜2位置
+    shoucai3: [465, 278]      # 收菜3位置
+    shoucai4: [575, 280]      # 收菜4位置
+    shiqu: [714, 457]         # 拾取位置
+    zaochan: [103, 235]      # 早产位置
+    jinma: [101, 341]       # 槿麻位置
+
+  wait_for_growth: 360             # 等待生长时间（秒）
