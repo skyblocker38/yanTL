@@ -51,20 +51,14 @@ def run(ctx: BotContext):
         # Fallback: add one background message click to improve hit rate
         _post_click(hwnd, int(click_x), int(click_y))
 
-    should_click_now = True
-
     while not ctx.control.stop:
         if not ctx.control.running:
             ctx.clock.sleep(0.2)
-            should_click_now = True
             continue
 
         hwnd = ctx.binder.ensure()
-
-        if should_click_now:
-            _click_once(hwnd)
-            print(f"[CRAFT] clicked at ({click_x},{click_y}) x{click_times}")
-            should_click_now = False
+        _click_once(hwnd)
+        print(f"[CRAFT] clicked at ({click_x},{click_y}) x{click_times}")
 
         wait_s = random.uniform(wait_min, wait_max)
         print(f"[CRAFT] waiting {wait_s:.1f}s")
