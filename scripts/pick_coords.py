@@ -2,7 +2,7 @@ import time
 import keyboard
 import win32gui
 
-WINDOW_TITLE = "《新天龙八部》 0.08.0706 (原始一区:江湖梦)"  # 必须完全匹配
+WINDOW_TITLE = "《新天龙八部》 0.08.1109 (原始一区:江湖梦)"  # 必须完全匹配
 # WINDOW_TITLE = "《新天龙八部》 0.07.7507 (怀旧二区:天下第一)"  # 必须完全匹配
 
 def get_hwnd(title: str) -> int:
