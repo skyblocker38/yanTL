@@ -1,0 +1,9 @@
+1. 检查游戏基本设置：分辨率1024*768，场景地图缩放到最小，点一下右上角小地图的N，视距最好是默认，携带宝宝/携带瓶颈暗器二选一（推荐后者）。
+2. 开始菜单打开Anaconda prompt
+3. 依次输入以下三条命令（可以复制粘贴），每输完一行点一下回车 (第三条命令在更新后需要更新版本号)：
+
+cd yanTL-main
+conda activate TLBB
+python main.py --title "《新天龙八部》 0.08.0911 (原始一区:江湖梦)" --mode cod_instance --profile cod_instance_default --config config/profiles_cod_v3.yaml
+
+4. 出现中文提示后，点击F8开启运行，需要提前拉好跟随，并处在太湖之外的地图。开启后会前往太湖然后等待整点开始找反。结束后按F9退出，理论上不退出的话会一直尝试找反。

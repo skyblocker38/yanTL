@@ -1,0 +1,14 @@
+103 62   4 103 60   
+92 24     10
+56 27     15
+28 24     20
+41 79     25
+24 100   31
+
+[F6] screen=(1008,130)  client=(552,80)  client_size=(1024x768)
+[F6] screen=(1023,130)  client=(567,80)  client_size=(1024x768)
+[F6] screen=(1008,141)  client=(552,91)  client_size=(1024x768)
+[F6] screen=(1022,141)  client=(566,91)  client_size=(1024x768)
+98 80
+107 37
+104 23 

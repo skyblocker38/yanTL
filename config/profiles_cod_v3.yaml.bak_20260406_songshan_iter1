@@ -1,0 +1,246 @@
+cod_instance_default:
+  jitter: 0.12
+  cod_ini: "debug/route_profile/cod_profiled_taihu_iter2_songshan_euclid.ini"
+
+  map_order:
+    - "taihu"
+    - "songshan"
+    - "dunhuang"
+    - "jiange"
+    - "wuliangshan"
+  start_map: "taihu"
+  route_opt_enabled: false
+  map_entry_points:
+    "taihu": [215, 275]
+  map_transition_points:
+    "taihu->songshan": [88, 19]
+
+  scene_aliases:
+    "\u6566\u714c": "dunhuang"
+    "\u5d69\u5c71": "songshan"
+    "\u5251\u9601": "jiange"
+    "\u65e0\u91cf\u5c71": "wuliangshan"
+    "\u592a\u6e56": "taihu"
+
+  templates:
+    npc: []
+    npc_interact_success: []
+    instance_kill_counts:
+      "2": "templates/number2.png"
+      "6": "templates/number6.png"
+      "10": "templates/number10.png"
+      "15": "templates/number15.png"
+      "20": "templates/number20.png"
+      "25": "templates/number25.png"
+    scenes:
+      "dunhuang": "templates/map_dunhuang.png"
+      "songshan": "templates/map_songshan.png"
+      "jiange": "templates/map_jiange.png"
+      "wuliangshan": "templates/map_wuliangshan.png"
+      "taihu": "templates/map_taihu.png"
+
+  clicks:
+    coord_input: [920, 468]
+    move_btn: [996, 470]
+    ditu_click: [459, 595]
+    confirm_btn: [575, 471]
+    talk_option_1: [0, 0]
+    talk_option_2: [0, 0]
+    enter_instance: [69, 220]
+    confirm_instance: [0, 0]
+
+  scene_clicks:
+    "dunhuang": [373, 250]
+    "songshan": [681, 486]
+    "jiange": [375, 496]
+    "wuliangshan": [537, 692]
+    "taihu": [801, 461]
+
+  npc_threshold: 0.82
+  npc_plain_threshold: 0.82
+  npc_enable_plain_fallback: false
+  search_timeout: 12
+  search_interval: 0.6
+  npc_very_fast_fail_enabled: true
+  npc_very_fast_fail_after: 1.2
+  npc_very_fast_fail_score_ceiling: 0.65
+  npc_fast_fail_enabled: false
+  npc_fast_fail_after: 2.2
+  npc_fast_fail_score_ceiling: 0.52
+  npc_fast_fail_min_attempts: 2
+  npc_quick_scan_hard_cap_enabled: true
+  npc_quick_scan_hard_cap_after: 1.8
+  npc_quick_scan_hard_cap_min_attempts: 2
+  npc_score_log_enabled: true
+  npc_score_log_path: "debug/npc_score_log.tsv"
+  npc_scan_during_move_enabled: true
+  npc_scan_during_move_min_elapsed: 0.5
+  npc_scan_during_move_threshold: 0.92
+  npc_scan_during_move_plain_threshold: 0.92
+  npc_scan_during_move_confirm_hits: 2
+  npc_moving_quick_click_times: 1
+  npc_moving_quick_click_wait: 0.15
+  npc_moving_coord_stable_timeout: 1.8
+  npc_moving_coord_stable_interval: 0.3
+  npc_moving_coord_stable_hits: 2
+  npc_moving_static_confirm_timeout: 1.2
+  npc_moving_static_confirm_interval: 0.3
+  npc_use_yellow_mask: true
+  npc_text_hsv_lower: [18, 100, 180]
+  npc_text_hsv_upper: [36, 255, 255]
+  npc_label_roi: [50, 40, 974, 742]
+  npc_click_offset_x: 0
+  npc_click_offset_y: 28
+  npc_candidate_width: 120
+  npc_candidate_height: 40
+  npc_candidate_dir: "debug/npc_matches"
+  npc_template_dir: "templates"
+  npc_adopt_hotkey: "f10"
+  npc_debug_save_search_roi: false
+  npc_search_debug_dir: "debug/npc_search"
+  npc_rejected_debug_dir: "debug/npc_rejected"
+  npc_confirm_mode: false
+  npc_confirm_correct_key: "f6"
+  npc_confirm_wrong_key: "f7"
+  npc_confirm_skip_key: "f8"
+  npc_press_f12_before_search: true
+  npc_f12_hold: 0.05
+  npc_f12_wait: 0.5
+  npc_click_times: 1
+  npc_interact_wait: 2.0
+  npc_interact_success_roi: [15, 205, 42, 230]
+  npc_interact_success_threshold: 0.82
+  npc_interact_success_timeout: 6.0
+  npc_interact_success_poll_interval: 0.5
+  npc_interact_debug_dir: "debug/npc_interact"
+  npc_save_success_hit_debug: true
+  npc_save_success_miss_debug: true
+
+  scene_threshold: 0.85
+  scene_match_retries: 3
+  scene_match_interval: 2.0
+  scene_roi: [867, 15, 955, 29]
+  scene_verify_poll_interval: 5
+  scene_verify_max_wait: 0
+
+  current_coord_roi: [894, 33, 948, 46]
+  coord_verify_enabled: true
+  coord_verify_max_wait: 0
+  coord_verify_poll_interval: 2
+  coord_tolerance: 0
+  coord_move_method: "map_click"
+  map_click_wait: 0.25
+  map_click_press_move_btn: false
+  map_click_move_btn_wait: 0.2
+  map_click_calibration:
+    coord_1: [119, 59]
+    click_1: [366, 210]
+    coord_2: [237, 273]
+    click_2: [580, 598]
+  coord_debug_on_fail: true
+  coord_mask_mode: "gray"
+  coord_gray_threshold: 185
+  coord_text_hsv_lower: [15, 0, 180]
+  coord_text_hsv_upper: [179, 80, 255]
+  coord_templates:
+    "0": "templates/coord_digits/0.png"
+    "1": "templates/coord_digits/1.png"
+    "2": "templates/coord_digits/2.png"
+    "3": "templates/coord_digits/3.png"
+    "4": "templates/coord_digits/4.png"
+    "5": "templates/coord_digits/5.png"
+    "6": "templates/coord_digits/6.png"
+    "7": "templates/coord_digits/7.png"
+    "8": "templates/coord_digits/8.png"
+    "9": "templates/coord_digits/9.png"
+
+  open_map_wait: 1.5
+  scene_click_wait: 1.5
+  scene_anchor_wait: 1.0
+  scene_travel_wait: 90
+  open_route_wait: 1.0
+  pre_route_press_i: true
+  pre_route_i_hold: 0.05
+  pre_route_i_wait: 0.2
+  move_to_xy_wait: 10
+  move_to_xy_max_wait: 30
+  move_min_wait: 4
+  move_verify_poll_interval: 2.0
+  move_verify_roi: [320, 180, 704, 520]
+  move_still_threshold: 2.2
+  move_stable_count: 2
+
+  dialogue_actions: []
+
+  instance_route:
+    - name: "instance-1"
+      x: 98
+      y: 80
+      target_kill: 2
+    - name: "instance-2"
+      x: 108
+      y: 41
+      target_kill: 6
+    - name: "instance-3"
+      x: 102
+      y: 27
+      target_kill: 10
+    - name: "instance-4"
+      x: 56
+      y: 27
+      target_kill: 15
+    - name: "instance-5"
+      x: 28
+      y: 24
+      target_kill: 20
+    - name: "instance-6"
+      x: 41
+      y: 79
+      target_kill: 25
+    - name: "instance-7"
+      x: 24
+      y: 100
+
+  instance_kill_template_dir: "templates"
+  instance_kill_roi: [553, 97, 567, 110]
+  instance_kill_use_blue_mask: true
+  instance_kill_hsv_lower: [90, 80, 80]
+  instance_kill_hsv_upper: [135, 255, 255]
+  instance_kill_threshold: 0.70
+  instance_kill_min_score_margin: 0.03
+  instance_coord_move_method: "map_click"
+  instance_map_click_calibration:
+    coord_1: [30, 25]
+    click_1: [307, 239]
+    coord_2: [73, 101]
+    click_2: [478, 543]
+  instance_kill_min_nonzero_pixels_target: 6
+  instance_kill_min_nonzero_pixels_template: 6
+  instance_kill_confirm_hits: 2
+  instance_kill_min_accept_elapsed: 2.0
+  instance_kill_max_over_target: 3
+  instance_kill_poll_interval: 0.8
+  instance_kill_max_wait: 20
+  instance_timeout_recover_enabled: true
+  instance_timeout_recover_streak: 2
+  instance_timeout_recover_from_index: 2
+  instance_timeout_recover_hold: 5.0
+  instance_kill_debug_save: false
+  instance_kill_debug_dir: "debug/instance_kill"
+  instance_kill_debug_interval: 1.0
+  instance_arrive_settle_min: 2.0
+  instance_arrive_settle_max: 2.0
+  instance_return_poll_interval: 1.0
+  instance_return_max_wait: 0
+  instance_stop_follow_hold: 0.05
+  instance_stop_follow_wait: 0.3
+  instance_start_follow_hold: 0.05
+  instance_start_follow_wait: 0.3
+
+  fight_wait: 20
+  enter_instance_click_wait: 0.5
+  confirm_instance_click_wait: 0.5
+  enter_instance_wait: 5
+  instance_exit_wait: 0
+  post_instance_cooldown: 3
+  wait_until_hour_on_start: true

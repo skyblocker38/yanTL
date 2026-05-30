@@ -1,0 +1,102 @@
+cod_instance_default:
+  jitter: 0.12
+  cod_ini: "cod.ini"
+
+  map_order:
+    - "taihu"
+    - "songshan"
+    - "dunhuang"
+    - "jiange"
+    - "wuliangshan"
+
+  scene_aliases:
+    "\u6566\u714c": "dunhuang"
+    "\u5d69\u5c71": "songshan"
+    "\u5251\u9601": "jiange"
+    "\u65e0\u91cf\u5c71": "wuliangshan"
+    "\u592a\u6e56": "taihu"
+
+  templates:
+    npc: []
+    scenes:
+      "dunhuang": "templates/map_dunhuang.png"
+      "songshan": "templates/map_songshan.png"
+      "jiange": "templates/map_jiange.png"
+      "wuliangshan": "templates/map_wuliangshan.png"
+      "taihu": "templates/map_taihu.png"
+
+  clicks:
+    coord_input: [920, 468]
+    move_btn: [996, 470]
+    ditu_click: [459, 595]
+    confirm_btn: [575, 471]
+    talk_option_1: [0, 0]
+    talk_option_2: [0, 0]
+    enter_instance: [0, 0]
+    confirm_instance: [0, 0]
+
+  scene_clicks:
+    "dunhuang": [373, 250]
+    "songshan": [681, 486]
+    "jiange": [375, 496]
+    "wuliangshan": [537, 692]
+    "taihu": [801, 461]
+
+  npc_threshold: 0.82
+  search_timeout: 12
+  search_interval: 1.0
+  npc_use_yellow_mask: true
+  npc_text_hsv_lower: [15, 80, 140]
+  npc_text_hsv_upper: [40, 255, 255]
+  # 建议先只在角色前方和屏幕中心附近搜索，减少误识别
+  npc_label_roi: [280, 140, 760, 420]
+  # 点“造反恶贼”文字下方一点，去落到 NPC 身上
+  npc_click_offset_x: 0
+  npc_click_offset_y: 28
+  npc_candidate_width: 120
+  npc_candidate_height: 40
+  npc_candidate_dir: "debug/npc_matches"
+  npc_template_dir: "templates"
+  npc_adopt_hotkey: "f7"
+  npc_click_times: 1
+  npc_interact_wait: 2.0
+
+  scene_threshold: 0.95
+  scene_match_retries: 3
+  scene_match_interval: 2.0
+  scene_roi: [867, 15, 955, 29]
+  scene_verify_poll_interval: 5
+  scene_verify_max_wait: 90
+
+  # 当前坐标显示区域（地图名下方）
+  current_coord_roi: [894, 33, 948, 46]
+  coord_verify_enabled: true
+  coord_verify_max_wait: 30
+  coord_verify_poll_interval: 2
+  coord_tolerance: 3
+  coord_text_hsv_lower: [15, 0, 180]
+  coord_text_hsv_upper: [179, 80, 255]
+  coord_templates: {}
+
+  open_map_wait: 1.5
+  scene_click_wait: 1.5
+  scene_anchor_wait: 1.0
+  scene_travel_wait: 90
+  open_route_wait: 1.0
+  move_to_xy_wait: 10
+  move_to_xy_max_wait: 30
+  move_min_wait: 4
+  move_verify_poll_interval: 2.0
+  move_verify_roi: [320, 180, 704, 520]
+  move_still_threshold: 2.2
+  move_stable_count: 2
+
+  dialogue_actions: []
+
+  dungeon_waypoints: []
+
+  fight_wait: 20
+  enter_instance_wait: 8
+  instance_exit_wait: 30
+  post_instance_cooldown: 3
+  wait_until_hour_on_start: false

@@ -1,0 +1,42 @@
+cod_instance_default:
+  jitter: 0.12
+  cod_ini: "cod.ini"
+
+  map_order: ["敦煌", "嵩山", "剑阁", "无量山", "太湖"]
+
+  templates:
+    npc: []
+
+  clicks:
+    coord_input: [920, 468]
+    move_btn: [996, 470]
+    ditu_click: [459, 595]
+    confirm_btn: [575, 471]
+    talk_option_1: [0, 0]
+    talk_option_2: [0, 0]
+    enter_instance: [0, 0]
+    confirm_instance: [0, 0]
+
+  scene_clicks: {}
+
+  npc_threshold: 0.82
+  search_timeout: 12
+  search_interval: 1.0
+  npc_click_times: 1
+  npc_interact_wait: 2.0
+
+  open_map_wait: 1.5
+  scene_click_wait: 1.5
+  scene_anchor_wait: 1.0
+  scene_travel_wait: 15
+  open_route_wait: 1.0
+  move_to_xy_wait: 10
+
+  dialogue_actions: []
+
+  dungeon_waypoints: []
+
+  fight_wait: 20
+  enter_instance_wait: 8
+  instance_exit_wait: 30
+  post_instance_cooldown: 3

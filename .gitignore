@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Local virtual/conda artifacts
+.venv/
+env/
+
+# Runtime and debug outputs
+debug/
+logs/
+dist/
+build/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
