@@ -2,6 +2,9 @@ import random
 from dataclasses import dataclass
 from typing import Any
 
+import win32api
+import win32con
+
 from core.clicker_human import ForegroundBlock, HumanClicker
 
 
@@ -35,6 +38,19 @@ def run(ctx: BotContext):
     print("[*] craft_material started: F8/Pause start-pause, F9 stop")
     print(f"[*] click=({click_x},{click_y}), wait=[{wait_min:.1f}, {wait_max:.1f}]s")
 
+    def _post_click(hwnd: int, x: int, y: int):
+        lp = win32api.MAKELONG(int(x), int(y))
+        win32api.PostMessage(hwnd, win32con.WM_LBUTTONDOWN, win32con.MK_LBUTTON, lp)
+        ctx.clock.sleep(0.03)
+        win32api.PostMessage(hwnd, win32con.WM_LBUTTONUP, 0, lp)
+
+    def _click_once(hwnd: int):
+        # Primary path: same as existing stable features (foreground + human click)
+        with ForegroundBlock(hwnd, max_wait=0.6):
+            clicker.click(hwnd, int(click_x), int(click_y), times=click_times)
+        # Fallback: add one background message click to improve hit rate
+        _post_click(hwnd, int(click_x), int(click_y))
+
     should_click_now = True
 
     while not ctx.control.stop:
@@ -46,8 +62,7 @@ def run(ctx: BotContext):
         hwnd = ctx.binder.ensure()
 
         if should_click_now:
-            with ForegroundBlock(hwnd, max_wait=0.8):
-                clicker.click(hwnd, int(click_x), int(click_y), times=click_times)
+            _click_once(hwnd)
             print(f"[CRAFT] clicked at ({click_x},{click_y}) x{click_times}")
             should_click_now = False
 
