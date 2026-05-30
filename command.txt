@@ -14,5 +14,5 @@ python main.py --title "《新天龙八部》 0.08.1109 (原始一区:江湖梦)
 python main.py --title "《新天龙八部》 0.08.1109 (原始一区:江湖梦)" --mode cod_instance --profile cod_instance_default --config config/profiles_cod_v3.yaml
 
 # 搓材料
-python main.py --title "《新天龙八部》 0.08.0207 (原始一区:江湖梦)" --mode craft_material --profile cod_instance_default --config config/profiles_cod_v3.yaml
+python main.py --title "《新天龙八部》 0.08.1109 (原始一区:江湖梦)" --mode craft_material --profile cod_instance_default --config config/profiles_cod_v3.yaml
 ```

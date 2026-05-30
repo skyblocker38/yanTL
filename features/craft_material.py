@@ -35,20 +35,22 @@ def run(ctx: BotContext):
     print("[*] craft_material started: F8/Pause start-pause, F9 stop")
     print(f"[*] click=({click_x},{click_y}), wait=[{wait_min:.1f}, {wait_max:.1f}]s")
 
+    should_click_now = True
+
     while not ctx.control.stop:
         if not ctx.control.running:
             ctx.clock.sleep(0.2)
+            should_click_now = True
             continue
 
         hwnd = ctx.binder.ensure()
+
+        if should_click_now:
+            with ForegroundBlock(hwnd, max_wait=0.8):
+                clicker.click(hwnd, int(click_x), int(click_y), times=click_times)
+            print(f"[CRAFT] clicked at ({click_x},{click_y}) x{click_times}")
+            should_click_now = False
+
         wait_s = random.uniform(wait_min, wait_max)
         print(f"[CRAFT] waiting {wait_s:.1f}s")
         ctx.clock.sleep(wait_s)
-
-        if ctx.control.stop or not ctx.control.running:
-            continue
-
-        with ForegroundBlock(hwnd, max_wait=0.8):
-            clicker.click(hwnd, int(click_x), int(click_y), times=click_times)
-        print(f"[CRAFT] clicked at ({click_x},{click_y}) x{click_times}")
-
