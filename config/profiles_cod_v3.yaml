@@ -231,7 +231,7 @@ cod_instance_default:
   instance_kill_max_wait: 20
   instance_timeout_recover_enabled: true
   instance_timeout_recover_streak: 2
-  instance_timeout_recover_from_index: 2
+  instance_timeout_recover_point: [74, 21]
   instance_timeout_recover_arrive_settle: 2.0
   instance_timeout_recover_hold: 5.0
   instance_kill_debug_save: false
@@ -252,4 +252,4 @@ cod_instance_default:
   enter_instance_wait: 5
   instance_exit_wait: 0
   post_instance_cooldown: 3
-  wait_until_hour_on_start: true
+  wait_until_hour_on_start: false

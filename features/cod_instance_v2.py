@@ -1559,54 +1559,43 @@ def _run_instance_timeout_recovery(
     clicker: HumanClicker,
     cfg: dict,
     digit_templates: dict[str, Any],
-    route: list[dict[str, Any]],
     instance_calibration: dict | None,
-    start_index: int,
-    end_index: int,
 ):
-    if not route:
-        return
-
-    start_from = max(1, min(int(start_index), len(route)))
-    end_at = max(start_from, min(int(end_index), len(route)))
+    recover_point = cfg.get("instance_timeout_recover_point", [74, 21])
+    coord = (int(recover_point[0]), int(recover_point[1]))
     hold_secs = float(cfg.get("instance_timeout_recover_hold", 5.0))
     arrive_settle = float(cfg.get("instance_timeout_recover_arrive_settle", 2.0))
+    label = str(cfg.get("instance_timeout_recover_label", "instance-recover"))
 
     print(
-        f"[INSTANCE] Timeout recovery: restart from point {start_from} to {end_at}, "
+        f"[INSTANCE] Timeout recovery: move to {coord}, "
         f"arrive_settle={arrive_settle:.1f}s hold={hold_secs:.1f}s"
     )
-    for index in range(start_from, end_at + 1):
-        if ctx.control.stop:
-            break
-        point = route[index - 1]
-        coord = (int(point["x"]), int(point["y"]))
-        label = str(point.get("name", f"instance-{index}"))
 
-        _travel_to_coordinate(
-            ctx,
-            hwnd,
-            clicker,
-            cfg,
-            coord,
-            f"{label}-recovery",
-            digit_templates,
-            move_mode=str(cfg.get("instance_coord_move_method", "input")),
-            map_click_calibration=instance_calibration,
-        )
+    _travel_to_coordinate(
+        ctx,
+        hwnd,
+        clicker,
+        cfg,
+        coord,
+        label,
+        digit_templates,
+        move_mode=str(cfg.get("instance_coord_move_method", "input")),
+        map_click_calibration=instance_calibration,
+    )
 
-        if arrive_settle > 0:
-            ctx.clock.sleep(arrive_settle)
-        with ForegroundBlock(hwnd, max_wait=0.6):
-            ctx.input.press(hwnd, "k", hold=float(cfg.get("instance_stop_follow_hold", 0.05)))
-        ctx.clock.sleep(float(cfg.get("instance_stop_follow_wait", 0.3)))
-        print(f"[INSTANCE] {label} recovery reached, pressed K")
+    if arrive_settle > 0:
+        ctx.clock.sleep(arrive_settle)
+    with ForegroundBlock(hwnd, max_wait=0.6):
+        ctx.input.press(hwnd, "k", hold=float(cfg.get("instance_stop_follow_hold", 0.05)))
+    ctx.clock.sleep(float(cfg.get("instance_stop_follow_wait", 0.3)))
+    print(f"[INSTANCE] {label} reached, pressed K")
 
-        ctx.clock.sleep(hold_secs)
-        with ForegroundBlock(hwnd, max_wait=0.6):
-            ctx.input.press(hwnd, "i", hold=float(cfg.get("instance_start_follow_hold", 0.05)))
-        ctx.clock.sleep(float(cfg.get("instance_start_follow_wait", 0.3)))
-        print(f"[INSTANCE] {label} recovery hold done, pressed I")
+    ctx.clock.sleep(hold_secs)
+    with ForegroundBlock(hwnd, max_wait=0.6):
+        ctx.input.press(hwnd, "i", hold=float(cfg.get("instance_start_follow_hold", 0.05)))
+    ctx.clock.sleep(float(cfg.get("instance_start_follow_wait", 0.3)))
+    print(f"[INSTANCE] {label} hold done, pressed I")
 
 
 def _run_dungeon_route(
@@ -1701,17 +1690,13 @@ def _run_dungeon_route(
                     bool(cfg.get("instance_timeout_recover_enabled", True))
                     and timeout_streak >= int(cfg.get("instance_timeout_recover_streak", 2))
                 ):
-                    recover_start = int(cfg.get("instance_timeout_recover_from_index", 1))
                     _run_instance_timeout_recovery(
                         ctx,
                         hwnd,
                         clicker,
                         cfg,
                         digit_templates,
-                        route,
                         instance_calibration,
-                        start_index=recover_start,
-                        end_index=index,
                     )
                     timeout_streak = 0
                     index += 1
