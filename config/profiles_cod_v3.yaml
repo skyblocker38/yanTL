@@ -133,6 +133,9 @@ cod_instance_default:
   map_click_wait: 0.25
   map_click_press_move_btn: false
   map_click_move_btn_wait: 0.2
+  route_retry_on_stuck_enabled: true
+  route_retry_no_coord_change_after: 5.0
+  route_retry_max_attempts: 3
   map_click_calibration:
     coord_1: [119, 59]
     click_1: [366, 210]
@@ -231,7 +234,7 @@ cod_instance_default:
   instance_kill_max_wait: 20
   instance_timeout_recover_enabled: true
   instance_timeout_recover_streak: 2
-  instance_timeout_recover_point: [74, 21]
+  instance_timeout_recover_point: [83, 20]
   instance_timeout_recover_arrive_settle: 2.0
   instance_timeout_recover_hold: 5.0
   instance_kill_debug_save: false

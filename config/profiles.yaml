@@ -10,6 +10,27 @@ sa:
   macro:
     - { type: key, key: "s", hold: 0.05, gap: 0.25 }
     - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "s", hold: 0.05, gap: 0.25 }
+    - { type: key, key: "a", hold: 0.06, gap: 0.35 }
+    - { type: key, key: "3", hold: 0.06, gap: 0.25 }
 fast:
   jitter: 0.10
   loop_gap: 0.5
@@ -59,8 +80,8 @@ recover_default:
 
   # 目标坐标
   target:
-    x: 24
-    y: 107
+    x: 20
+    y: 171
 
   # 时间配置（可选，使用默认值）
   walk_to_mengpo_wait: 5     # 走到孟婆的等待时间

@@ -762,6 +762,7 @@ def _wait_for_target_coordinate(
     digit_templates: dict[str, Any],
     label: str,
     npc_templates: list[Any] | None = None,
+    retry_route: Any = None,
 ):
     if not bool(cfg.get("coord_verify_enabled", True)):
         return False
@@ -774,6 +775,12 @@ def _wait_for_target_coordinate(
     elapsed = 0.0
     move_npc_hits = 0
     moving_npc = None
+    retry_enabled = bool(cfg.get("route_retry_on_stuck_enabled", True)) and retry_route is not None
+    retry_after = float(cfg.get("route_retry_no_coord_change_after", 5.0))
+    retry_max = int(cfg.get("route_retry_max_attempts", 3))
+    retry_count = 0
+    last_coord = None
+    last_coord_change_elapsed = 0.0
     scan_enabled = bool(cfg.get("npc_scan_during_move_enabled", False)) and bool(npc_templates)
     scan_min_elapsed = float(cfg.get("npc_scan_during_move_min_elapsed", 0.5))
     scan_threshold = float(cfg.get("npc_scan_during_move_threshold", cfg.get("npc_threshold", 0.82)))
@@ -799,12 +806,33 @@ def _wait_for_target_coordinate(
                         current = None
 
         if current is not None:
+            if last_coord is None or current != last_coord:
+                last_coord = current
+                last_coord_change_elapsed = elapsed
+
             dx = abs(current[0] - int(target[0]))
             dy = abs(current[1] - int(target[1]))
             print(f"[COORD] {label} current={current} target={target} delta=({dx},{dy})")
             if dx <= tolerance and dy <= tolerance:
                 print(f"[COORD] {label} arrived by coordinate check")
                 return True, None
+
+            if (
+                retry_enabled
+                and retry_count < retry_max
+                and retry_after > 0
+                and elapsed - last_coord_change_elapsed >= retry_after
+            ):
+                retry_count += 1
+                print(
+                    f"[MOVE] {label} coordinate stuck at {current} for "
+                    f"{elapsed - last_coord_change_elapsed:.1f}s, retry route "
+                    f"({retry_count}/{retry_max})"
+                )
+                retry_route()
+                last_coord_change_elapsed = elapsed
+                move_npc_hits = 0
+                moving_npc = None
         else:
             print(f"[COORD] {label} coordinate read failed, retry")
             if bool(cfg.get("coord_debug_on_fail", True)):
@@ -984,21 +1012,17 @@ def _coord_to_map_click(coord: tuple[int, int], cfg: dict, cal: dict | None = No
     return int(round(sx * x + bx)), int(round(sy * y + by))
 
 
-def _travel_to_coordinate(
+def _route_to_coordinate_once(
     ctx: BotContext,
     hwnd: int,
     clicker: HumanClicker,
     cfg: dict,
     coord: tuple[int, int],
-    label: str,
-    digit_templates: dict[str, Any] | None = None,
-    move_mode: str | None = None,
+    method: str,
     map_click_calibration: dict | None = None,
-    npc_templates: list[Any] | None = None,
-):
+) -> str:
     clicks = cfg.get("clicks", {})
     target_x, target_y = coord
-    method = str(move_mode or cfg.get("coord_move_method", "map_click")).lower()
 
     with ForegroundBlock(hwnd, max_wait=0.6):
         if bool(cfg.get("pre_route_press_i", True)):
@@ -1041,6 +1065,44 @@ def _travel_to_coordinate(
             ctx.clock.sleep(0.5)
         ctx.input.press(hwnd, "tab", hold=0.15)
 
+    return method
+
+
+def _travel_to_coordinate(
+    ctx: BotContext,
+    hwnd: int,
+    clicker: HumanClicker,
+    cfg: dict,
+    coord: tuple[int, int],
+    label: str,
+    digit_templates: dict[str, Any] | None = None,
+    move_mode: str | None = None,
+    map_click_calibration: dict | None = None,
+    npc_templates: list[Any] | None = None,
+):
+    target_x, target_y = coord
+    method = str(move_mode or cfg.get("coord_move_method", "map_click")).lower()
+
+    def retry_route():
+        _route_to_coordinate_once(
+            ctx,
+            hwnd,
+            clicker,
+            cfg,
+            coord,
+            method,
+            map_click_calibration=map_click_calibration,
+        )
+
+    method = _route_to_coordinate_once(
+        ctx,
+        hwnd,
+        clicker,
+        cfg,
+        coord,
+        method,
+        map_click_calibration=map_click_calibration,
+    )
     print(f"[MOVE] Travel to {label}: ({target_x},{target_y}) via {method}")
     coord_ok, moving_npc = _wait_for_target_coordinate(
         ctx,
@@ -1050,6 +1112,7 @@ def _travel_to_coordinate(
         digit_templates or {},
         label,
         npc_templates=npc_templates,
+        retry_route=retry_route,
     )
     if not coord_ok and not bool(cfg.get("coord_verify_enabled", True)):
         _wait_for_motion_to_settle(ctx, hwnd, cfg, label)
