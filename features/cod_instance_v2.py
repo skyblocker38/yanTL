@@ -1808,6 +1808,20 @@ def _wait_until_next_hour(ctx: BotContext, cfg: dict):
         print("[START] Top of the hour reached, begin scanning")
 
 
+def _press_start_follow_before_patrol(ctx: BotContext, hwnd: int, cfg: dict):
+    if not bool(cfg.get("start_follow_before_first_search", True)):
+        return
+
+    with ForegroundBlock(hwnd, max_wait=0.6):
+        ctx.input.press(
+            hwnd,
+            "i",
+            hold=float(cfg.get("start_follow_key_hold", cfg.get("instance_start_follow_hold", 0.05))),
+        )
+    ctx.clock.sleep(float(cfg.get("start_follow_wait", cfg.get("instance_start_follow_wait", 0.3))))
+    print("[START] Pressed I to start team follow before first NPC search")
+
+
 def _handle_coordinate(
     ctx: BotContext,
     hwnd: int,
@@ -2019,6 +2033,7 @@ def run(ctx: BotContext):
                     _wait_until_next_hour(ctx, cfg)
                     if ctx.control.stop:
                         break
+                    _press_start_follow_before_patrol(ctx, hwnd, cfg)
                     _handle_coordinate(
                         ctx,
                         hwnd,

@@ -13,6 +13,7 @@ import features.recover_autocombat as recover_autocombat
 import features.auto_plant as auto_plant
 import features.cod_instance_v2 as cod_instance
 import features.craft_material as craft_material
+import features.kill_switch_combat as kill_switch_combat
 
 FEATURES = {
   "macro_combat": macro_combat.run,
@@ -21,6 +22,7 @@ FEATURES = {
   "auto_plant": auto_plant.run,
   "cod_instance": cod_instance.run,
   "craft_material": craft_material.run,
+  "kill_switch_combat": kill_switch_combat.run,
 }
 
 

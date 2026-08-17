@@ -248,6 +248,9 @@ cod_instance_default:
   instance_stop_follow_wait: 0.3
   instance_start_follow_hold: 0.05
   instance_start_follow_wait: 0.3
+  start_follow_before_first_search: true
+  start_follow_key_hold: 0.05
+  start_follow_wait: 0.3
 
   fight_wait: 20
   enter_instance_click_wait: 0.5
