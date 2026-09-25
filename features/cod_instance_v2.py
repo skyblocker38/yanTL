@@ -763,6 +763,7 @@ def _wait_for_target_coordinate(
     label: str,
     npc_templates: list[Any] | None = None,
     retry_route: Any = None,
+    abort_check: Any = None,
 ):
     if not bool(cfg.get("coord_verify_enabled", True)):
         return False
@@ -788,6 +789,8 @@ def _wait_for_target_coordinate(
     scan_confirm_hits = int(cfg.get("npc_scan_during_move_confirm_hits", 2))
 
     while (max_wait <= 0 or elapsed <= max_wait) and not ctx.control.stop:
+        if abort_check is not None:
+            abort_check()
         roi = tuple(int(v) for v in cfg.get("current_coord_roi", [894, 33, 948, 46]))
         img = grab_client(hwnd)
         x1, y1, x2, y2 = roi
@@ -829,7 +832,7 @@ def _wait_for_target_coordinate(
                     f"{elapsed - last_coord_change_elapsed:.1f}s, retry route "
                     f"({retry_count}/{retry_max})"
                 )
-                retry_route()
+                retry_route(current)
                 last_coord_change_elapsed = elapsed
                 move_npc_hits = 0
                 moving_npc = None
@@ -1009,7 +1012,13 @@ def _coord_to_map_click(coord: tuple[int, int], cfg: dict, cal: dict | None = No
         return None
     sx, bx, sy, by = solved
     x, y = int(coord[0]), int(coord[1])
-    return int(round(sx * x + bx)), int(round(sy * y + by))
+    click_x = int(round(sx * x + bx))
+    click_y = int(round(sy * y + by))
+    offset = cal.get("click_offset", [0, 0])
+    if isinstance(offset, (list, tuple)) and len(offset) == 2:
+        click_x += int(offset[0])
+        click_y += int(offset[1])
+    return click_x, click_y
 
 
 def _route_to_coordinate_once(
@@ -1082,8 +1091,39 @@ def _travel_to_coordinate(
 ):
     target_x, target_y = coord
     method = str(move_mode or cfg.get("coord_move_method", "map_click")).lower()
+    active_calibration = dict(map_click_calibration) if isinstance(map_click_calibration, dict) else map_click_calibration
 
-    def retry_route():
+    def retry_route(current=None):
+        if (
+            method == "map_click"
+            and current is not None
+            and isinstance(active_calibration, dict)
+            and bool(cfg.get("map_click_feedback_correction_enabled", False))
+        ):
+            solved = _solve_linear_mapping(
+                tuple(active_calibration.get("coord_1", [])),
+                tuple(active_calibration.get("click_1", [])),
+                tuple(active_calibration.get("coord_2", [])),
+                tuple(active_calibration.get("click_2", [])),
+            )
+            if solved is not None:
+                sx, _, sy, _ = solved
+                old_offset = active_calibration.get("click_offset", [0, 0])
+                if not isinstance(old_offset, (list, tuple)) or len(old_offset) != 2:
+                    old_offset = [0, 0]
+                error_x = int(target_x) - int(current[0])
+                error_y = int(target_y) - int(current[1])
+                correction_x = int(round(sx * error_x))
+                correction_y = int(round(sy * error_y))
+                active_calibration["click_offset"] = [
+                    int(old_offset[0]) + correction_x,
+                    int(old_offset[1]) + correction_y,
+                ]
+                print(
+                    f"[MOVE] {label} feedback correction coord_error=({error_x},{error_y}) "
+                    f"pixel_delta=({correction_x},{correction_y}) "
+                    f"offset={active_calibration['click_offset']}"
+                )
         _route_to_coordinate_once(
             ctx,
             hwnd,
@@ -1091,7 +1131,7 @@ def _travel_to_coordinate(
             cfg,
             coord,
             method,
-            map_click_calibration=map_click_calibration,
+            map_click_calibration=active_calibration,
         )
 
     method = _route_to_coordinate_once(
@@ -1101,7 +1141,7 @@ def _travel_to_coordinate(
         cfg,
         coord,
         method,
-        map_click_calibration=map_click_calibration,
+        map_click_calibration=active_calibration,
     )
     print(f"[MOVE] Travel to {label}: ({target_x},{target_y}) via {method}")
     coord_ok, moving_npc = _wait_for_target_coordinate(

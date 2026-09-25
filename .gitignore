@@ -12,6 +12,9 @@ debug/
 logs/
 dist/
 build/
+*.spec
+config/*_map_click_mapping.tsv
+config/*_before_prune_*.txt
 
 # OS/editor noise
 .DS_Store

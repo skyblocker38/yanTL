@@ -5,7 +5,7 @@
 使用方法:
     python scripts/capture_map_roi.py --title "游戏窗口标题"
     
-    脚本会每隔一段时间自动截取一次，或者按回车手动截取
+    脚本会每隔一段时间自动截取一次，或者按 F6 全局热键手动截取
 """
 
 import sys
@@ -13,7 +13,7 @@ import os
 import time
 import cv2
 import argparse
-import msvcrt
+import keyboard
 
 # 添加父目录到路径
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -22,7 +22,7 @@ from core.window import WindowBinder
 from core.capture_win32 import grab_client
 
 
-def save_map_roi(hwnd, roi, name_prefix="map"):
+def save_map_roi(hwnd, roi, name_prefix="map", output_path=None):
     """
     截取并保存地图ROI区域
     
@@ -31,9 +31,6 @@ def save_map_roi(hwnd, roi, name_prefix="map"):
         roi: ROI区域 (x1, y1, x2, y2)
         name_prefix: 文件名前缀
     """
-    # 创建debug目录
-    os.makedirs("debug", exist_ok=True)
-    
     # 截取游戏窗口
     img = grab_client(hwnd)
     
@@ -41,9 +38,14 @@ def save_map_roi(hwnd, roi, name_prefix="map"):
     x1, y1, x2, y2 = roi
     roi_img = img[y1:y2, x1:x2]
     
-    # 生成文件名（带时间戳）
-    timestamp = time.strftime("%Y%m%d_%H%M%S")
-    filename = f"debug/{name_prefix}_roi_{timestamp}.png"
+    if output_path:
+        filename = output_path
+        output_dir = os.path.dirname(os.path.abspath(filename))
+        os.makedirs(output_dir, exist_ok=True)
+    else:
+        os.makedirs("debug", exist_ok=True)
+        timestamp = time.strftime("%Y%m%d_%H%M%S")
+        filename = f"debug/{name_prefix}_roi_{timestamp}.png"
     
     # 保存图片
     cv2.imwrite(filename, roi_img)
@@ -63,9 +65,15 @@ def main():
     parser.add_argument("--prefix", type=str, default="map", 
                         help="文件名前缀 (默认: map)")
     parser.add_argument("--mode", type=str, choices=["manual", "auto"], default="manual",
-                        help="模式: manual=按回车截取, auto=自动定时截取 (默认: manual)")
+                        help="模式: manual=按全局热键截取, auto=自动定时截取 (默认: manual)")
     parser.add_argument("--interval", type=int, default=5,
                         help="自动模式下的截取间隔(秒) (默认: 5)")
+    parser.add_argument("--output", type=str, default=None,
+                        help="直接保存到指定文件；多次截取会覆盖该文件")
+    parser.add_argument("--capture-key", type=str, default="f6",
+                        help="手动截图全局热键（默认: f6）")
+    parser.add_argument("--quit-key", type=str, default="f9",
+                        help="退出脚本全局热键（默认: f9）")
     
     args = parser.parse_args()
     
@@ -86,8 +94,8 @@ def main():
     
     if args.mode == "manual":
         print("操作说明:")
-        print("  [回车键] - 截取当前地图ROI并保存")
-        print("  [q]     - 退出脚本")
+        print(f"  [{args.capture_key.upper()}] - 截取当前ROI并保存")
+        print(f"  [{args.quit_key.upper()}] - 退出脚本")
     else:
         print(f"自动截取模式 - 每 {args.interval} 秒自动截取一次")
         print("  [Ctrl+C] - 退出脚本")
@@ -108,24 +116,25 @@ def main():
     
     try:
         if args.mode == "manual":
-            # 手动模式
+            capture_was_down = False
+            quit_was_down = False
             while True:
-                print("按 [回车] 截取，按 [q] 退出...", end="\r")
-                
-                if msvcrt.kbhit():
-                    key = msvcrt.getch()
-                    
-                    if key == b'\r':  # 回车
-                        capture_count += 1
-                        prefix = f"{args.prefix}_{capture_count}"
-                        save_map_roi(hwnd, roi, name_prefix=prefix)
-                        print()
-                    
-                    elif key in (b'q', b'Q'):  # q 或 Q
-                        print("\n[退出] 用户按下 q 键")
-                        break
-                
-                time.sleep(0.1)
+                capture_is_down = keyboard.is_pressed(args.capture_key)
+                quit_is_down = keyboard.is_pressed(args.quit_key)
+
+                if capture_is_down and not capture_was_down:
+                    capture_count += 1
+                    prefix = f"{args.prefix}_{capture_count}"
+                    save_map_roi(hwnd, roi, name_prefix=prefix, output_path=args.output)
+                    print()
+
+                if quit_is_down and not quit_was_down:
+                    print(f"\n[退出] 用户按下 {args.quit_key.upper()}")
+                    break
+
+                capture_was_down = capture_is_down
+                quit_was_down = quit_is_down
+                time.sleep(0.03)
         
         else:
             # 自动模式
@@ -138,7 +147,7 @@ def main():
                 if current_time - last_capture >= args.interval:
                     capture_count += 1
                     prefix = f"{args.prefix}_{capture_count}"
-                    save_map_roi(hwnd, roi, name_prefix=prefix)
+                    save_map_roi(hwnd, roi, name_prefix=prefix, output_path=args.output)
                     print()
                     last_capture = current_time
                 

@@ -59,10 +59,181 @@ kill_switch:
   combat_key_hold: 0.06
   hp_debug_log_interval: 1
 
+gather_herbs:
+  jitter: 0.04
+  scene: shilin
+  route_type: "client_map_click"
+  map_click_route_files:
+    shilin: "config/shilin_map_clicks.txt"
+  route_files:
+    shilin: "config/shilin_recorded.txt"
+    xueyuan: "config/xueyuan_recorded.txt"
+  repeat_route: true
+  herb_count_notebook: "logs/herb_count_notebook.tsv"
+  gather_method: "center_click"
+  center_click_require_leaf: true
+
+  # 第一阶段仅测试地图点击寻路；绿叶参数设置好后再开启识别。
+  leaf_detection_enabled: false
+  coord_move_method: "input"
+  pre_route_press_i: false
+  open_route_wait: 0.8
+  map_click_wait: 0.25
+  map_click_press_move_btn: false
+  map_click_calibrations:
+    shilin:
+      coord_1: [270, 53]
+      click_1: [639, 199]
+      coord_2: [252, 78]
+      click_2: [608, 245]
+    xueyuan:
+      coord_1: []
+      click_1: []
+      coord_2: []
+      click_2: []
+  current_coord_roi: [894, 33, 948, 46]
+  coord_verify_enabled: true
+  coord_verify_max_wait: 0
+  coord_verify_poll_interval: 0.6
+  coord_tolerance: 0
+  coord_mask_mode: "gray"
+  coord_debug_on_fail: false
+  coord_gray_threshold: 185
+  coord_text_hsv_lower: [15, 0, 180]
+  coord_text_hsv_upper: [179, 80, 255]
+  route_retry_on_stuck_enabled: true
+  route_retry_no_coord_change_after: 5.0
+  route_retry_max_attempts: 3
+  map_click_feedback_correction_enabled: false
+  coord_templates:
+    "0": "templates/coord_digits/0.png"
+    "1": "templates/coord_digits/1.png"
+    "2": "templates/coord_digits/2.png"
+    "3": "templates/coord_digits/3.png"
+    "4": "templates/coord_digits/4.png"
+    "5": "templates/coord_digits/5.png"
+    "6": "templates/coord_digits/6.png"
+    "7": "templates/coord_digits/7.png"
+    "8": "templates/coord_digits/8.png"
+    "9": "templates/coord_digits/9.png"
+  clicks:
+    coord_input: [920, 468]
+    move_btn: [996, 470]
+
+  # 小地图范围和绿叶模板将在移动测试通过后单独标定。
+  templates:
+    herb_leaf: "templates/herb_leaf.png"
+    harvest_dialog: "templates/pickup_all.png"
+    herb_verification: "templates/herb_verification.png"
+    mount_icon: "templates/zuoqi.png"
+  herb_verification_roi: [491, 198, 542, 223]
+  herb_verification_threshold: 0.86
+  verification_alert_audio: "templates/alert.mp3"
+  verification_auto_resume: true
+  verification_clear_poll_interval: 0.3
+  verification_clear_hits: 3
+  minimap_roi: [849, 53, 1002, 218]
+  leaf_click_offset: [3, 3]
+  max_herbs_per_route_point: 3
+  leaf_rescan_wait_min: 0.5
+  leaf_rescan_wait_max: 0.9
+  leaf_match_mode: "hsv"
+  leaf_template_threshold: 0.82
+  leaf_hsv_lower: [35, 110, 120]
+  leaf_hsv_upper: [90, 255, 255]
+  leaf_min_area: 5
+  leaf_max_area: 160
+  leaf_max_width: 24
+  leaf_max_height: 24
+  leaf_min_fill: 0.18
+
+  leaf_walk_max_wait: 30
+  leaf_walk_start_wait: 1.2
+  leaf_walk_coord_interval: 0.5
+  leaf_walk_stable_hits: 3
+  leaf_arrival_settle_min: 2.0
+  leaf_arrival_settle_max: 3.0
+  stealth_key: "4"
+  stealth_settle_min: 1.0
+  stealth_settle_max: 2.0
+  arrival_action_wait_min: 0.3
+  arrival_action_wait_max: 0.6
+  herb_center_click: [507, 384]
+
+  # 从中心开始逐圈向外扫描；只有精确句柄才是采药小镰刀。
+  herb_search_roi: [400, 275, 615, 495]
+  herb_search_step: 7
+  herb_search_max_wait: 45
+  herb_cursor_move_min: 0.045
+  herb_cursor_move_max: 0.075
+  cursor_probe_wait: 0.03
+  sickle_cursor_confirm_hits: 2
+  sickle_cursor_handle: 131731
+  sickle_fallback_center_click: false
+
+  mount_icon_roi: [561, 63, 591, 92]
+  mount_icon_threshold: 0.85
+  mount_key: "0"
+  mount_wait_max: 10
+  mount_poll_interval: 0.3
+  dismount_wait_max: 5
+  dismount_poll_interval: 0.25
+  dismount_clear_hits: 2
+
+  harvest_dialog_roi: [668, 443, 729, 464]
+  harvest_dialog_threshold: 0.85
+  harvest_dialog_poll_interval: 0.3
+  harvest_dialog_max_wait: 12
+  harvest_fallback_wait: 5
+  pickup_click_delay_min: 0.0
+  pickup_click_delay_max: 2.0
+  pickup_all_click: [699, 454]
+
+record_herb_coords:
+  jitter: 0.02
+  scene: shilin
+  templates:
+    pickup_all_button: "templates/pickup_all.png"
+    herb_verification: "templates/herb_verification.png"
+  record_output_files:
+    shilin: "config/shilin_recorded.txt"
+    xueyuan: "config/xueyuan_recorded.txt"
+  record_deduplicate: true
+  pickup_button_roi: [668, 443, 729, 464]
+  pickup_button_threshold: 0.85
+  pickup_button_poll_interval: 0.2
+  pickup_button_clear_hits: 2
+  herb_verification_roi: [491, 198, 542, 223]
+  herb_verification_threshold: 0.86
+  verification_alert_audio: "templates/alert.mp3"
+  verification_auto_resume: true
+  verification_clear_poll_interval: 0.3
+  verification_clear_hits: 3
+  record_coord_read_attempts: 5
+  record_coord_read_interval: 0.15
+  current_coord_roi: [894, 33, 948, 46]
+  coord_mask_mode: "gray"
+  coord_debug_on_fail: false
+  coord_gray_threshold: 185
+  coord_text_hsv_lower: [15, 0, 180]
+  coord_text_hsv_upper: [179, 80, 255]
+  coord_templates:
+    "0": "templates/coord_digits/0.png"
+    "1": "templates/coord_digits/1.png"
+    "2": "templates/coord_digits/2.png"
+    "3": "templates/coord_digits/3.png"
+    "4": "templates/coord_digits/4.png"
+    "5": "templates/coord_digits/5.png"
+    "6": "templates/coord_digits/6.png"
+    "7": "templates/coord_digits/7.png"
+    "8": "templates/coord_digits/8.png"
+    "9": "templates/coord_digits/9.png"
+
 
 recover_default:
   jitter: 0.08
-  check_interval: 120        # 检测死亡弹窗的间隔（秒）
+  check_interval: 120        # 未死亡状态日志输出间隔（秒）
+  death_guard_interval: 0.5  # 全流程死亡检测间隔（秒）
   threshold: 0.8             # 出窍弹窗检测阈值
   
   # 地图检测相关配置
@@ -71,7 +242,31 @@ recover_default:
   max_total_retries: 5       # 总重试次数上限（防止流程2-3之间反复死亡）
   
   travel_wait: 120           # 世界地图传送等待时间（秒）
-  scene: moya            # 目标场景：xueyuan（雪原）或 huanglong（黄龙）
+  scene_threshold: 0.85
+  scene_verify_poll_interval: 1.0
+  scene_verify_max_wait: 120
+  current_coord_roi: [894, 33, 948, 46]
+  coord_verify_enabled: true
+  coord_verify_max_wait: 0
+  coord_verify_poll_interval: 1.0
+  coord_tolerance: 0
+  coord_mask_mode: "gray"
+  coord_debug_on_fail: false
+  coord_gray_threshold: 185
+  coord_text_hsv_lower: [15, 0, 180]
+  coord_text_hsv_upper: [179, 80, 255]
+  coord_templates:
+    "0": "templates/coord_digits/0.png"
+    "1": "templates/coord_digits/1.png"
+    "2": "templates/coord_digits/2.png"
+    "3": "templates/coord_digits/3.png"
+    "4": "templates/coord_digits/4.png"
+    "5": "templates/coord_digits/5.png"
+    "6": "templates/coord_digits/6.png"
+    "7": "templates/coord_digits/7.png"
+    "8": "templates/coord_digits/8.png"
+    "9": "templates/coord_digits/9.png"
+  scene: moya            # 目标场景：xueyuan/huanglong/moya/gaochang/qingyuan
 
   # 模板配置
   templates:
@@ -82,6 +277,8 @@ recover_default:
     map_xueyuan: "templates/map_xueyuan.png"       # 雪原地图名称（用于验证是否到达）
     map_huanglong: "templates/map_huanglong.png"   # 黄龙地图名称（用于验证是否到达）
     map_moya: "templates/map_moya.png"             # 摩崖洞地图名称（用于验证是否到达）
+    map_gaochang: "templates/map_gaochang.png"     # 高昌迷宫地图名称（可选，缺失时跳过验证）
+    map_qingyuan: "templates/map_qingyuan.png"     # 清源山洞地图名称（用于验证是否到达）
 
   # 点击坐标配置
   clicks:
@@ -91,6 +288,8 @@ recover_default:
     xueyuan: [660, 74]         # 雪原场景
     huanglong: [792, 631]      # 黄龙场景
     moya: [689, 303]           # 摩崖洞
+    gaochang: [255, 330]       # 高昌迷宫
+    qingyuan: [862, 693]       # 清源山洞
     ditu_click: [459, 595]     # 地图点击位置
     confirm_btn: [575, 471]    # 确认按钮
     coord_input: [920, 468]    # 坐标输入框

@@ -1,8 +1,9 @@
+import argparse
 import time
 import keyboard
 import win32gui
 
-WINDOW_TITLE = "《新天龙八部》 0.08.2313 (原始一区:江湖梦)"  # 必须完全匹配
+WINDOW_TITLE = "《新天龙八部》 0.08.2915 (原始一区:江湖梦)"  # 必须完全匹配
 # WINDOW_TITLE = "《新天龙八部》 0.07.7507 (怀旧二区:天下第一)"  # 必须完全匹配
 
 def get_hwnd(title: str) -> int:
@@ -12,7 +13,11 @@ def get_hwnd(title: str) -> int:
     return hwnd
 
 def main():
-    hwnd = get_hwnd(WINDOW_TITLE)
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--title", default=WINDOW_TITLE, help="目标游戏窗口的完整标题")
+    args = parser.parse_args()
+
+    hwnd = get_hwnd(args.title)
     print(f"已绑定窗口 hwnd={hwnd}")
     print("把鼠标移到目标位置，按 F6 打印坐标；按 ESC 退出")
 

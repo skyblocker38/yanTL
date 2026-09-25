@@ -14,6 +14,8 @@ import features.auto_plant as auto_plant
 import features.cod_instance_v2 as cod_instance
 import features.craft_material as craft_material
 import features.kill_switch_combat as kill_switch_combat
+import features.gather_herbs as gather_herbs
+import features.record_herb_coords as record_herb_coords
 
 FEATURES = {
   "macro_combat": macro_combat.run,
@@ -23,6 +25,8 @@ FEATURES = {
   "cod_instance": cod_instance.run,
   "craft_material": craft_material.run,
   "kill_switch_combat": kill_switch_combat.run,
+  "gather_herbs": gather_herbs.run,
+  "record_herb_coords": record_herb_coords.run,
 }
 
 
@@ -37,7 +41,16 @@ def main():
     parser.add_argument("--mode", default="macro_basic", choices=FEATURES.keys())
     parser.add_argument("--profile", default="default", help="profiles.yaml 里的 profile 名称")
     parser.add_argument("--config", default="config/profiles.yaml", help="配置文件路径")
-    parser.add_argument("--scene", default=None, choices=["xueyuan", "huanglong"], help="世界地图目标场景")
+    parser.add_argument("--scene", default=None, choices=["xueyuan", "huanglong", "moya", "gaochang", "qingyuan", "shilin"], help="目标场景")
+    parser.add_argument("--from-index", type=int, default=1, help="采药路线起始点编号，1-based，默认 1")
+    parser.add_argument("--enable-count", action="store_true", help="开启采药成功次数累计记录")
+    parser.add_argument("--count-file", default=None, help="采药计数笔记本路径")
+    parser.add_argument(
+        "--sickle-handle",
+        type=lambda value: int(value, 0),
+        default=None,
+        help="采药小镰刀光标句柄，支持十进制或 0x 十六进制",
+    )
     args = parser.parse_args()
 
     profiles = load_profiles(args.config)
@@ -48,6 +61,13 @@ def main():
 
     if args.scene:
         profile["scene"] = args.scene
+    if args.mode == "gather_herbs":
+        profile["route_start_index"] = args.from_index
+        profile["herb_count_enabled"] = args.enable_count
+        if args.count_file:
+            profile["herb_count_notebook"] = args.count_file
+        if args.sickle_handle is not None:
+            profile["sickle_cursor_handle"] = args.sickle_handle
 
     binder = WindowBinder(args.title)
     input_ctl = InputController()
